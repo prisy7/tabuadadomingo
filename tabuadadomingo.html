@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabuada Divertida: 4 e 5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #185a9d;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        
+        .subtitle {
+            color: #43cea2;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        #start-screen {
+            display: block;
+        }
+        
+        .phase-info {
+            background-color: #e6f7ff;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .phase-title {
+            font-size: 1.3rem;
+            color: #185a9d;
+            margin-bottom: 10px;
+        }
+        
+        .phase-description {
+            font-size: 1rem;
+            color: #333;
+        }
+        
+        .question {
+            font-size: 2.2rem;
+            color: #185a9d;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .option {
+            background-color: #e6f7ff;
+            border: 2px solid #43cea2;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option:hover {
+            background-color: #b3e5fc;
+            transform: scale(1.03);
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #185a9d, #43cea2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .score {
+            color: #185a9d;
+        }
+        
+        .phase {
+            color: #43cea2;
+        }
+        
+        .feedback {
+            font-size: 1.3rem;
+            margin: 15px 0;
+            min-height: 40px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        .correct {
+            color: #2e7d32;
+            background-color: #e8f5e9;
+        }
+        
+        .incorrect {
+            color: #c62828;
+            background-color: #ffebee;
+        }
+        
+        .result {
+            font-size: 1.8rem;
+            margin: 20px 0;
+            color: #185a9d;
+        }
+        
+        .stars {
+            font-size: 2.5rem;
+            margin: 15px 0;
+            color: gold;
+        }
+        
+        @media (max-width: 480px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .question {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tela inicial -->
+        <div id="start-screen" class="screen">
+            <h1>Tabuada Divertida</h1>
+            <div class="subtitle">Teste suas habilidades com as tabuadas do 4 e 5!</div>
+            
+            <div class="phase-info">
+                <div class="phase-title">Fase 1: Tabuada do 4</div>
+                <div class="phase-description">5 perguntas da tabuada do 4</div>
+            </div>
+            
+            <div class="phase-info">
+                <div class="phase-title">Fase 2: Tabuada do 5</div>
+                <div class="phase-description">5 perguntas da tabuada do 5</div>
+            </div>
+            
+            <div class="phase-info">
+                <div class="phase-title">Fase 3: Desafio Final</div>
+                <div class="phase-description">5 perguntas mistas das tabuadas do 4 e 5</div>
+            </div>
+            
+            <button id="start-btn" class="btn">Começar Jogo</button>
+        </div>
+        
+        <!-- Tela de jogo -->
+        <div id="game-screen" class="screen">
+            <div class="stats">
+                <div class="score">Pontos: <span id="score">0</span></div>
+                <div class="phase">Fase: <span id="phase">1</span>/3</div>
+            </div>
+            
+            <div id="phase-title" class="phase-title">Tabuada do 4</div>
+            
+            <div id="question" class="question">4 x 3 = ?</div>
+            
+            <div class="options">
+                <div class="option" data-value="0">12</div>
+                <div class="option" data-value="1">14</div>
+                <div class="option" data-value="2">16</div>
+                <div class="option" data-value="3">18</div>
+            </div>
+            
+            <div id="feedback" class="feedback"></div>
+            
+            <button id="next-btn" class="btn" style="display: none;">Próxima Pergunta</button>
+        </div>
+        
+        <!-- Tela de resultados -->
+        <div id="result-screen" class="screen">
+            <h1>Parabéns!</h1>
+            <div class="result">Você completou o jogo!</div>
+            
+            <div class="stars" id="stars">★★★★★</div>
+            
+            <div class="result">Sua pontuação final: <span id="final-score" class="score">0</span> pontos</div>
+            <div class="result">Respostas corretas: <span id="correct-answers">0</span>/15</div>
+            
+            <button id="restart-btn" class="btn">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        // Elementos do DOM
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const startBtn = document.getElementById('start-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const questionElement = document.getElementById('question');
+        const scoreElement = document.getElementById('score');
+        const phaseElement = document.getElementById('phase');
+        const phaseTitleElement = document.getElementById('phase-title');
+        const feedbackElement = document.getElementById('feedback');
+        const finalScoreElement = document.getElementById('final-score');
+        const correctAnswersElement = document.getElementById('correct-answers');
+        const starsElement = document.getElementById('stars');
+        const options = document.querySelectorAll('.option');
+        
+        // Variáveis do jogo
+        let currentPhase = 1;
+        let score = 0;
+        let correctAnswers = 0;
+        let currentQuestion;
+        let questionsInPhase = 5;
+        let questionsAnswered = 0;
+        
+        // Iniciar o jogo
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
+        
+        // Adicionar event listeners às opções de resposta
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                checkAnswer(parseInt(option.dataset.value));
+            });
+        });
+        
+        nextBtn.addEventListener('click', nextQuestion);
+        
+        function startGame() {
+            // Reiniciar variáveis do jogo
+            currentPhase = 1;
+            score = 0;
+            correctAnswers = 0;
+            questionsAnswered = 0;
+            
+            // Atualizar a interface
+            scoreElement.textContent = score;
+            phaseElement.textContent = currentPhase;
+            phaseTitleElement.textContent = "Tabuada do 4";
+            
+            // Mostrar tela de jogo e esconder outras
+            startScreen.style.display = 'none';
+            resultScreen.style.display = 'none';
+            gameScreen.style.display = 'block';
+            
+            // Iniciar a primeira pergunta
+            nextQuestion();
+        }
+        
+        function nextQuestion() {
+            // Esconder feedback e próximo botão
+            feedbackElement.textContent = '';
+            feedbackElement.className = 'feedback';
+            nextBtn.style.display = 'none';
+            
+            // Gerar nova pergunta baseada na fase atual
+            currentQuestion = generateQuestion(currentPhase);
+            questionElement.textContent = currentQuestion.text;
+            
+            // Mostrar opções de resposta
+            options.forEach((option, index) => {
+                option.textContent = currentQuestion.options[index];
+                option.style.pointerEvents = 'auto';
+                option.style.backgroundColor = '#e6f7ff';
+                option.style.borderColor = '#43cea2';
+            });
+            
+            questionsAnswered++;
+        }
+        
+        function generateQuestion(phase) {
+            let num1, num2, correctAnswer;
+            
+            switch(phase) {
+                case 1:
+                    // Fase 1: Tabuada do 4
+                    num1 = 4;
+                    num2 = Math.floor(Math.random() * 10) + 1; // 1 a 10
+                    break;
+                case 2:
+                    // Fase 2: Tabuada do 5
+                    num1 = 5;
+                    num2 = Math.floor(Math.random() * 10) + 1; // 1 a 10
+                    break;
+                case 3:
+                    // Fase 3: Tabuadas do 4 e 5 mistas
+                    num1 = Math.random() > 0.5 ? 4 : 5;
+                    num2 = Math.floor(Math.random() * 10) + 1; // 1 a 10
+                    break;
+            }
+            
+            correctAnswer = num1 * num2;
+            
+            // Gerar opções de resposta
+            let options = [correctAnswer];
+            
+            // Adicionar respostas incorretas próximas à correta
+            while (options.length < 4) {
+                // Gerar um valor próximo ao correto, mas não igual
+                let offset = Math.floor(Math.random() * 5) + 1;
+                if (Math.random() > 0.5) offset = -offset;
+                
+                let wrongAnswer = correctAnswer + offset;
+                
+                // Garantir que não seja negativo e não seja repetido
+                if (wrongAnswer > 0 && !options.includes(wrongAnswer)) {
+                    options.push(wrongAnswer);
+                }
+            }
+            
+            // Embaralhar opções
+            options = shuffleArray(options);
+            
+            return {
+                text: `${num1} x ${num2} = ?`,
+                answer: correctAnswer,
+                options: options
+            };
+        }
+        
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        
+        function checkAnswer(selectedIndex) {
+            const selectedValue = parseInt(currentQuestion.options[selectedIndex]);
+            const isCorrect = selectedValue === currentQuestion.answer;
+            
+            // Desabilitar cliques nas opções
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                // Resposta correta
+                feedbackElement.textContent = 'Correto! +10 pontos 🎉';
+                feedbackElement.className = 'feedback correct';
+                options[selectedIndex].style.backgroundColor = '#c8e6c9';
+                options[selectedIndex].style.borderColor = '#2e7d32';
+                
+                // Atualizar pontuação
+                score += 10;
+                scoreElement.textContent = score;
+                correctAnswers++;
+            } else {
+                // Resposta incorreta
+                feedbackElement.textContent = `Incorreto! A resposta era ${currentQuestion.answer}.`;
+                feedbackElement.className = 'feedback incorrect';
+                options[selectedIndex].style.backgroundColor = '#ffcdd2';
+                options[selectedIndex].style.borderColor = '#c62828';
+                
+                // Destacar a resposta correta
+                const correctIndex = currentQuestion.options.indexOf(currentQuestion.answer);
+                options[correctIndex].style.backgroundColor = '#c8e6c9';
+                options[correctIndex].style.borderColor = '#2e7d32';
+            }
+            
+            // Mostrar botão para próxima pergunta
+            nextBtn.style.display = 'block';
+            
+            // Verificar se completou a fase atual
+            if (questionsAnswered >= questionsInPhase) {
+                if (currentPhase < 3) {
+                    // Avançar para a próxima fase
+                    currentPhase++;
+                    phaseElement.textContent = currentPhase;
+                    
+                    // Atualizar título da fase
+                    if (currentPhase === 2) {
+                        phaseTitleElement.textContent = "Tabuada do 5";
+                    } else {
+                        phaseTitleElement.textContent = "Desafio Final: Tabuadas do 4 e 5";
+                    }
+                    
+                    questionsAnswered = 0;
+                    
+                    // Pequeno delay antes da próxima pergunta
+                    setTimeout(nextQuestion, 1500);
+                } else {
+                    // Completou todas as fases - fim de jogo
+                    setTimeout(endGame, 1000);
+                }
+            }
+        }
+        
+        function endGame() {
+            // Mostrar tela de resultados
+            gameScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            
+            // Atualizar estatísticas finais
+            finalScoreElement.textContent = score;
+            correctAnswersElement.textContent = correctAnswers;
+            
+            // Mostrar estrelas baseadas na pontuação
+            let stars = "";
+            const starCount = Math.min(5, Math.floor(correctAnswers / 3));
+            for (let i = 0; i < 5; i++) {
+                stars += i < starCount ? "★" : "☆";
+            }
+            starsElement.textContent = stars;
+        }
+    </script>
+</body>
+</html>
